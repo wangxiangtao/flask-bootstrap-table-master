@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="robots" content="noindex">
+    <title>Bootstrap Table - Flask example </title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.css">
+    {{ dropzone.load_css() }}
+    {{ dropzone.style('border: 2px dashed #0087F7; margin: 1% ; width: 200px ; min-height:190px') }}
+
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.1/bootstrap-table.min.js"></script>
+    <script src="../static/bootstrap-table-export.js"></script>
+    <script src="../static/xlsx.full.min.js"></script>
+    <script src="../static/FileSaver.min.js"></script>
+    <script src="//rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.js"></script>
+    {{ dropzone.load_js() }}
+
+</head>
+<body>
+
+{{nav.top.render()}}
+
+{{ dropzone.create(action='shareholding_rule_recon_uploads') }}
+
+
+<div class="container" style="">
+
+    <br/>
+    <div id="toolbar">
+        <button id="button" class="btn btn-default">Create Recon Report</button>
+    </div>
+    <table
+            id="table"
+            {# data-toggle="table" #}
+            data-toolbar="#toolbar"
+            data-show-columns="true"
+            data-show-export="true"
+            data-click-to-select="true"
+            data-height="500"
+            data-striped="true"
+            data-row-style="rowStyle">
+
+    </table>
+</div>
+
+
+<script>
+    alert("dd")
+    <!--var $table = $('#table');-->
+    <!--var $button = $('#button');-->
+    <!--var data = {{data|tojson}};-->
+    <!--var columns = {{columns|tojson}};-->
+
+    function rowStyle(row, index) {
+        var classes = ['active', 'success', 'info', 'warning', 'danger'];
+        if (index % 2 === 0) {
+            return {
+                css: {'background-color':'#eaf3f9'}
+            };
+        }
+        return {};
+    }
+
+    alert("ok")
+
+    $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+
+
+    $(function() {
+        $('#button').bind('click', function() {
+          $.getJSON($SCRIPT_ROOT + '/_add_numbers', {
+            a: $('input[name="a"]').val(),
+            b: $('input[name="b"]').val()
+          }, function(data) {
+            alert(data)
+           $('#table').bootstrapTable({
+                        data: data.result,
+                        columns: columns
+                    });
+            $("#result").text(data.result);
+          });
+          return false;
+        });
+  });
+
+</script>
+
+
+</body>
+</html>
